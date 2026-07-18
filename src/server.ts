@@ -1,7 +1,11 @@
-import app from "./app.js"
+import app from "./app.js";
 
-const PORT = 8000 ; 
+const PORT = 8000;
 
-app.listen(PORT , () => {
-    console.log(`Server is running on http://localhost:${PORT} `)
-})
+try {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT} `);
+  });
+} catch (err) {
+  console.log("Error in running the server : ", err);
+}
