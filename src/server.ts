@@ -1,6 +1,6 @@
 import app from "./app.js";
-
-const PORT = 8000;
+import { env } from "./config/env.js";
+const PORT = env.PORT || 8000;
 
 const startServer = () => {
   try {
