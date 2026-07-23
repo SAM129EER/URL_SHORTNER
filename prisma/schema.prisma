@@ -28,9 +28,11 @@ model User {
 
   isEmailVerified        Boolean                  @default(false)
   role                   userRole                 @default(USER)
+
   refreshSessions        RefreshSession[]
   emailVerificationToken EmailVerificationToken[]
   resetToken             PasswordResetToken[]
+  
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @updatedAt
 
