@@ -19,12 +19,12 @@ enum userRole {
 }
 
 model User {
-  id        String  @id @default(uuid())
+  id        String @id @default(uuid())
   firstName String
   lastName  String
-  email     String  @unique
+  email     String @unique
   password  String
-  username  String?
+  username  String @unique
 
   isEmailVerified        Boolean                  @default(false)
   role                   userRole                 @default(USER)
@@ -33,6 +33,8 @@ model User {
   resetToken             PasswordResetToken[]
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @updatedAt
+
+  // indexs
 }
 
 model RefreshSession {
@@ -40,30 +42,36 @@ model RefreshSession {
   userId           String
   refreshTokenHash String   @unique
   expiresAt        DateTime
-  user             User     @relation(fields: [userId], references: [id])
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model EmailVerificationToken {
-  id         String   @id @default(uuid())
-  userId     String
-  emailToken String   @unique
-  expiresAt  DateTime
-  user       User     @relation(fields: [userId], references: [id])
+  id             String   @id @default(uuid())
+  userId         String
+  emailTokenHash String   @unique
+  expiresAt      DateTime
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model PasswordResetToken {
-  id         String   @id @default(uuid())
-  userId     String
-  resetToken String   @unique
-  expiresAt  DateTime
-  user       User     @relation(fields: [userId], references: [id])
+  id             String   @id @default(uuid())
+  userId         String
+  resetTokenHash String   @unique
+  expiresAt      DateTime
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
