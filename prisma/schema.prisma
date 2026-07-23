@@ -5,17 +5,65 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+enum userRole {
+  USER
+  ADMIN
+  MODERATOR
+}
+
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  profile   String?
+  id        String  @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String  @unique
+  password  String
+  username  String?
+
+  isEmailVerified        Boolean                  @default(false)
+  role                   userRole                 @default(USER)
+  refreshSessions        RefreshSession[]
+  emailVerificationToken EmailVerificationToken[]
+  resetToken             PasswordResetToken[]
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+}
+
+model RefreshSession {
+  id               String   @id @default(uuid())
+  userId           String
+  refreshTokenHash String   @unique
+  expiresAt        DateTime
+  user             User     @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EmailVerificationToken {
+  id         String   @id @default(uuid())
+  userId     String
+  emailToken String   @unique
+  expiresAt  DateTime
+  user       User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id         String   @id @default(uuid())
+  userId     String
+  resetToken String   @unique
+  expiresAt  DateTime
+  user       User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
