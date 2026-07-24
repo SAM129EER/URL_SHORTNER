@@ -81,8 +81,8 @@ export const loginService = async (data: {
 }) => {
   const user = await findByEmail(data.email);
 
-  if (user) {
-    throw new AppError(409, "User already exists");
+  if (!user) {
+    throw new AppError(409, "User does not exists");
   }
 
   const isPasswordCorrect = await comparePassword(
