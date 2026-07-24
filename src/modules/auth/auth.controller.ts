@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { registerService } from "./auth.service.js";
+import { registerService, loginService } from "./auth.service.js";
 
 // Cookie options for the refresh token
 const REFRESH_COOKIE_OPTIONS = {
@@ -14,7 +14,7 @@ const ACCESS_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: false, // Set to true in production with HTTPS
   sameSite: "lax" as const,
-  maxAge: 15 *60 * 1000, // 7 days
+  maxAge: 15 * 60 * 1000, // 7 days
   path: "/",
 };
 
@@ -34,4 +34,16 @@ export const registerUserController = async (req: Request, res: Response) => {
   });
 };
 
-export const loginUserController = () => {};
+export const loginUserController = async (req: Request, res: Response) => {
+  const result = await loginService(req.body);
+  res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
+  res.cookie("accessToken", result.accessToken, ACCESS_COOKIE_OPTIONS);
+  res.status(201).json({
+    success: true,
+    message:
+      "User created successfully. Please check your email to verify your account.",
+    data: {
+      user: result.safeUser,
+    },
+  });
+};
