@@ -19,22 +19,22 @@ enum userRole {
 }
 
 model User {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   firstName String?
   lastName  String?
-  email     String @unique
+  email     String  @unique
   password  String
-  username  String @unique
+  username  String  @unique
 
-  isEmailVerified        Boolean                  @default(false)
-  role                   userRole                 @default(USER)
+  isEmailVerified Boolean  @default(false)
+  role            userRole @default(USER)
 
   refreshSessions        RefreshSession[]
   emailVerificationToken EmailVerificationToken[]
   resetToken             PasswordResetToken[]
-  
-  createdAt              DateTime                 @default(now())
-  updatedAt              DateTime                 @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // indexs
 }

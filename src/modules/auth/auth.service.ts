@@ -1,7 +1,21 @@
-import { createUser, findByEmail , createEmailVerificationToken } from "./auth.repository.js";
+import {
+  createUser,
+  findByEmail,
+  createEmailVerificationToken,
+  createRefreshSession,
+} from "./auth.repository.js";
 import { AppError } from "../../utils/appError.js";
-import { generateRandomToken, hashPassword, hashToken } from "./auth.utils.js";
+import {
+  generateAccessToken,
+  generateRandomToken,
+  generateRefreshToken,
+  hashPassword,
+  hashToken,
+} from "./auth.utils.js";
+import { sendVerificationEmail } from "./auth.email.js";
 
+
+// Register Service is here 
 export const registerService = async (data: {
   username: string;
   email: string;
@@ -18,10 +32,14 @@ export const registerService = async (data: {
 
   const { passwordConfirm, ...userData } = data;
 
+  // console.log(data)
+
   const newUser = await createUser({
     ...userData,
     password: hashedPassword,
   });
+
+  const { password, ...safeUser } = newUser;
 
   //   email verifiaction token
   const randomToken = generateRandomToken();
@@ -33,4 +51,24 @@ export const registerService = async (data: {
     emailTokenHash: hashedRandomToken,
     expiresAt,
   });
+
+  await sendVerificationEmail(newUser.email, randomToken, newUser.username);
+
+  const accessToken = generateAccessToken(newUser.id, newUser.role);
+  const refreshToken = generateRefreshToken(newUser.id, newUser.role);
+  const hasedRefreshToken = hashToken(refreshToken);
+
+  const refreshExpiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+
+  await createRefreshSession({
+    userId: newUser.id,
+    refreshTokenHash: hasedRefreshToken,
+    expiresAt: refreshExpiresAt,
+  });
+
+  return {
+    user: safeUser,
+    refreshToken: refreshToken,
+    accessToken: accessToken,
+  };
 };

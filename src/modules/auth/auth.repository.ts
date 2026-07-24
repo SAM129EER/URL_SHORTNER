@@ -14,8 +14,6 @@ export const createUser = async (data: {
   username: string;
   email: string;
   password: string;
-  firstName?: string;
-  lastName?: string;
 }) => {
   return prisma.user.create({
     data,
@@ -28,6 +26,16 @@ export const createEmailVerificationToken = async (data: {
   expiresAt: Date;
 }) => {
   return prisma.emailVerificationToken.create({
+    data,
+  });
+};
+
+export const createRefreshSession = async (data: {
+  userId: string;
+  refreshTokenHash: string;
+  expiresAt: Date;
+}) => {
+  return prisma.refreshSession.create({
     data,
   });
 };
