@@ -1,5 +1,14 @@
 import { prisma } from "../../config/prisma.js";
 
+// Querys from user table
+export const findByUsername = async (userName: string) => {
+  return await prisma.user.findUnique({
+    where: {
+      username: userName,
+    },
+  });
+};
+
 export const findByEmail = async (email: string) => {
   return await prisma.user.findUnique({
     where: {
@@ -7,8 +16,6 @@ export const findByEmail = async (email: string) => {
     },
   });
 };
-
-// auth.repository.ts
 
 export const createUser = async (data: {
   username: string;
@@ -19,7 +26,7 @@ export const createUser = async (data: {
     data,
   });
 };
-
+// 
 export const createEmailVerificationToken = async (data: {
   userId: string;
   emailTokenHash: string;
