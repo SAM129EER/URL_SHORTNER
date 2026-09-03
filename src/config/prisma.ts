@@ -1,3 +1,4 @@
+// @ts-ignore Generated Prisma client is outside the application's src root.
 import { PrismaClient } from "../../prisma/generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 

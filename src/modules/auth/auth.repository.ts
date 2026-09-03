@@ -27,10 +27,7 @@ export const createUser = async (data: {
   });
 };
 
-
-
-
-// 
+//
 export const createEmailVerificationToken = async (data: {
   userId: string;
   emailTokenHash: string;
@@ -40,10 +37,6 @@ export const createEmailVerificationToken = async (data: {
     data,
   });
 };
-
-
-
-
 
 export const createRefreshSession = async (data: {
   userId: string;

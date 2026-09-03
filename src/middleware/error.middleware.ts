@@ -1,6 +1,6 @@
 // src/middleware/error.middleware.ts
 
-import { Request, Response, NextFunction } from "express";
+import {type Request,type Response, type NextFunction } from "express";
 import { AppError } from "../utils/appError.js";
 
 export const globalErrorHandler = (

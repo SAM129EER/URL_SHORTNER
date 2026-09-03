@@ -14,7 +14,6 @@ import {
   hashToken,
 } from "./auth.utils.js";
 import { sendVerificationEmail } from "./auth.email.js";
-import { string } from "zod";
 
 // Register Service is here
 export const registerService = async (data: {

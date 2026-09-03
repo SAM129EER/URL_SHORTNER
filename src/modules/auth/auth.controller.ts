@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { type Request, type Response } from "express";
 import { registerService, loginService } from "./auth.service.js";
 
 // Cookie options for the refresh token
