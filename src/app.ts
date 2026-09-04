@@ -16,9 +16,9 @@ app.use(
   }),
 );
 
-app.get("/", (req, res) => {
-  res.send("hello world!");
-});
+// app.get("/", (req, res) => {
+//   res.send("hello world!");
+// });
 
 app.use("/api/v1/auth", authRouter);
 
